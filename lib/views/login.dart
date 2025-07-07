@@ -1,3 +1,4 @@
+import 'package:app_santander/views/cadastro_conta.dart';
 import 'package:app_santander/views/dashboard.dart';
 import 'package:flutter/material.dart';
 
@@ -107,6 +108,25 @@ class _LoginState extends State<Login> {
               style: TextStyle(
                 color: Colors.red,
                 decoration: TextDecoration.underline,
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CadastroConta(),
+                  ),
+                );
+              },
+              child: Text(
+                "Criar uma conta agora",
+                style: TextStyle(
+                  color: Colors.red,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
             Expanded(
