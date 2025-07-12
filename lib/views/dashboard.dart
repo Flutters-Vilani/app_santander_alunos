@@ -1,3 +1,5 @@
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
@@ -9,6 +11,14 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   bool cardAberto = false;
+  int _current = 0;
+  final CarouselSliderController _controller = CarouselSliderController();
+
+  final List<String> stringList = [
+    '1',
+    '2',
+    '3',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +184,88 @@ class _DashboardState extends State<Dashboard> {
                 )
               ],
             ),
-          )
+          ),
+          // container para determinar a largura e altura da lista horizontal
+          // para a lista nao explodir a tela
+          Container(
+            width: MediaQuery.of(context).size.width * 1,
+            height: 130,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Card(
+                    child: Container(
+                      width: 130,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.pix),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text("Pix"),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          // column dos cards vermelhos
+          Column(children: [
+            CarouselSlider(
+
+              items: [
+                Container(
+                  height: 150,
+                  width: double.maxFinite,
+                  color: Colors.red,
+                  child: Column(
+                    children: [
+                      Text('Conta PJ + fácil'),
+                      Text('Conta MEI c/ 1 ano grátis em poucos\ncliques. Abra já'),
+                    ],
+                  ),
+                ),
+                Text('2'),
+                Text('3'),
+              ],
+              carouselController: _controller,
+              options: CarouselOptions(
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  height: 80,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _current = index;
+                    });
+                  }),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: stringList.asMap().entries.map((entry) {
+                return GestureDetector(
+                  onTap: () => _controller.animateToPage(entry.key),
+                  child: Container(
+                    width: 12.0,
+                    height: 12.0,
+                    margin:
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: (Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black)
+                            .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                  ),
+                );
+              }).toList(),
+            ),
+          ]),
         ],
       ),
     );
