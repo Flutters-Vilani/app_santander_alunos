@@ -46,7 +46,7 @@ class _CadastroContaState extends State<CadastroConta> {
             onPressed: () async {
               await http
                   .post(
-                Uri.parse("http://10.38.0.133:8000/api/usuarios"),
+                Uri.parse("http://10.38.0.130:8000/api/usuarios"),
                 headers: {
                   "Accept": "application/json",
                   "Content-Type": "application/json"

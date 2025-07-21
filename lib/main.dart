@@ -1,3 +1,4 @@
+import 'package:app_santander/views/definir_transferencia.dart';
 import 'package:flutter/material.dart';
 import 'views/splash_screen.dart';
 
@@ -17,7 +18,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SplashScreen(),
+      home: DefinirTransferencia(),
       debugShowCheckedModeBanner: false,
     );
   }
