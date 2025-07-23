@@ -1,3 +1,4 @@
+import 'package:app_santander/views/revisao_pix.dart';
 import 'package:flutter/material.dart';
 
 class DefinirTransferencia extends StatefulWidget {
@@ -8,6 +9,8 @@ class DefinirTransferencia extends StatefulWidget {
 }
 
 class _DefinirTransferenciaState extends State<DefinirTransferencia> {
+  TextEditingController controllerValor = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,9 +103,16 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
                   ),
                   child: TextField(
                     decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(5),
-                        hintText: "Valor"),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(5),
+                      hintText: "Valor",
+                      // prefixText: "R\$",
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        controllerValor.text = value;
+                      });
+                    },
                   ),
                 ),
                 Divider(),
@@ -186,13 +196,14 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
                       Row(
                         children: [
                           Radio(
+                            activeColor: Color.fromARGB(255, 236, 9, 0),
                             value: true,
                             groupValue: true,
                             onChanged: (value) {},
                             hoverColor: Color.fromARGB(255, 236, 9, 0),
                           ),
                           Text(
-                            "Conta Corrent",
+                            "Conta Corrente",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -226,7 +237,7 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Saldo disponivel"),
+                          Text("Saldo + Limite"),
                           Container(
                             width: 150,
                             height: 10,
@@ -248,16 +259,23 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
               children: [
                 Divider(),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => DefinirTransferencia()));
-                  },
+                  onTap: controllerValor.text.isEmpty
+                      ? null
+                      : () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => RevisaoPix(),
+                            ),
+                          );
+                        },
                   child: Container(
                     margin: EdgeInsets.only(top: 18),
                     alignment: Alignment.center,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 236, 9, 0),
+                      color: controllerValor.text.isEmpty
+                          ? Colors.grey
+                          : Color.fromARGB(255, 236, 9, 0),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     width: double.maxFinite,
