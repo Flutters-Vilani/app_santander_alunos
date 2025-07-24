@@ -1,7 +1,10 @@
+import 'package:app_santander/views/comprovante.dart';
 import 'package:flutter/material.dart';
 
 class RevisaoPix extends StatefulWidget {
-  const RevisaoPix({super.key});
+  double valor;
+
+  RevisaoPix({required this.valor, super.key});
 
   @override
   State<RevisaoPix> createState() => _RevisaoPixState();
@@ -92,7 +95,7 @@ class _RevisaoPixState extends State<RevisaoPix> {
                   ),
                 ),
                 Text(
-                  "R\$ 1.000.000,00",
+                  "R\$ ${widget.valor}",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
@@ -204,12 +207,11 @@ class _RevisaoPixState extends State<RevisaoPix> {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => RevisaoPix(),
+                    builder: (_) => Comprovante(),
                   ),
                 );
               },
               child: Container(
-                
                 alignment: Alignment.center,
                 height: 50,
                 decoration: BoxDecoration(

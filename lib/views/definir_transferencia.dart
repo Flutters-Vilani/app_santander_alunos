@@ -264,7 +264,9 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
                       : () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => RevisaoPix(),
+                              builder: (_) => RevisaoPix(
+                                valor: double.parse(controllerValor.text),
+                              ),
                             ),
                           );
                         },
