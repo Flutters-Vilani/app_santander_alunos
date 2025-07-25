@@ -1,3 +1,4 @@
+import 'package:app_santander/controllers/pix/pix_controller.dart';
 import 'package:app_santander/views/comprovante.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,7 @@ class RevisaoPix extends StatefulWidget {
 
 class _RevisaoPixState extends State<RevisaoPix> {
   bool switchValue = false;
+  PixController pixController = PixController();
 
   @override
   Widget build(BuildContext context) {
@@ -205,11 +207,12 @@ class _RevisaoPixState extends State<RevisaoPix> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => Comprovante(),
-                  ),
-                );
+                pixController.transferePix();
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (_) => Comprovante(),
+                //   ),
+                // );
               },
               child: Container(
                 alignment: Alignment.center,
