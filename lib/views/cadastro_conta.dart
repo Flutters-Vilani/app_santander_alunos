@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import '../controllers/request.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,6 +16,8 @@ class _CadastroContaState extends State<CadastroConta> {
   TextEditingController senhaController = TextEditingController();
   TextEditingController telefoneController = TextEditingController();
   TextEditingController cpfController = TextEditingController();
+
+  Request request = Request();
 
   @override
   Widget build(BuildContext context) {
@@ -44,26 +46,17 @@ class _CadastroContaState extends State<CadastroConta> {
           ),
           ElevatedButton(
             onPressed: () async {
-              await http
-                  .post(
-                Uri.parse("http://10.38.0.130:8000/api/usuarios"),
-                headers: {
-                  "Accept": "application/json",
-                  "Content-Type": "application/json"
+              request.methodRequest(
+                "usuarios",
+                "POST",
+                body: {
+                  "nome": nomeController.text,
+                  "cpf": cpfController.text,
+                  "email": emailController.text,
+                  "senha": senhaController.text,
+                  "telefone": telefoneController.text
                 },
-                body: jsonEncode(
-                  {
-                    "nome": nomeController.text,
-                    "cpf": cpfController.text,
-                    "email": emailController.text,
-                    "senha": senhaController.text,
-                    "telefone": telefoneController.text
-                  },
-                ),
-              )
-                  .then((http.Response response) {
-                print(response.statusCode);
-              });
+              );
             },
             child: Text("Cadastrar"),
           )

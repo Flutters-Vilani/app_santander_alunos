@@ -40,14 +40,14 @@ class _DashboardState extends State<Dashboard> {
                   : MediaQuery.of(context).size.height * 0.36,
               child: Stack(
                 children: [
-                  Image.asset("fundo_dashboard.png"),
+                  Image.asset("assets/fundo_dashboard.png"),
                   Padding(
                     padding: const EdgeInsets.only(right: 12.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Image.asset(
-                          "teste3.png",
+                          "assets/teste3.png",
                           width: 150,
                         ),
                         Row(

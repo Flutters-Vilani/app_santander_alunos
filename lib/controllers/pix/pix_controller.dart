@@ -5,8 +5,8 @@ class PixController {
 
   transferePix() async {
     await request.methodRequest("transacoes", "POST", body: {
-      "idusuarioOrigem": "1",
-      "idusuarioDestino": "2",
+      "idusuarioOrigem": "6",
+      "idusuarioDestino": "12",
       "valor": "10000"
     });
   }
