@@ -206,13 +206,19 @@ class _RevisaoPixState extends State<RevisaoPix> {
               ],
             ),
             GestureDetector(
-              onTap: () {
-                pixController.transferePix();
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (_) => Comprovante(),
-                //   ),
-                // );
+              onTap: () async {
+                dynamic resposta = await pixController.transferePix();
+
+                print(resposta['statusCode'].toString());
+
+                if (resposta['statusCode'] >= 200 &&
+                    resposta['statusCode'] < 300) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => Comprovante(),
+                    ),
+                  );
+                }
               },
               child: Container(
                 alignment: Alignment.center,

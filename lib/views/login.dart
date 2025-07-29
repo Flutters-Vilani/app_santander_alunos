@@ -2,6 +2,7 @@ import 'package:app_santander/controllers/request.dart';
 import 'package:app_santander/views/cadastro_conta.dart';
 import 'package:app_santander/views/dashboard.dart';
 import 'package:flutter/material.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -142,11 +143,14 @@ class _LoginState extends State<Login> {
               children: [
                 GestureDetector(
                   onTap: () async {
+                    // final prefs = await SharedPreferences.getInstance();
                     dynamic resposta = await request.methodRequest(
                         "auth/login", "POST", body: {
                       "cpf": cpfController.text,
                       "senha": senhaController.text
                     });
+
+                    // await prefs.setString("token", resposta["body"]["token"]);
 
                     print(resposta["body"]["token"]);
 

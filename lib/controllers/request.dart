@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class Request {
   String BASE_URL = "http://santa.avanth.kinghost.net/api";
-  String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NTM0OTQxNTgsImV4cCI6MTc1MzQ5Nzc1OCwicm9sZXMiOlsiVVNVQVJJTyJdLCJ1c2VybmFtZSI6IjA3ODQ4OTAzMTYyIn0.wvvp8JIMC2Bmk3SdCE18-_YVlhMKiZlV31nHdyCBbU7TiecRwCVXsQMMqDlZyzPDZYMQPt2us3S5VLw2yNzxA5jKaDuxoTuBpvfGco6KLH1iMGDKjcwsXciUtI0C2AA8I3U7FsiiTaCo47r2fkhZNlrhZkFyx9PDH2KPyDYEbw-XsAm0dUsvHek9jcGZhQN5m-ZxfQjgFNru7Z-nRsK75aGIsUl7lm2EzcQ6I4sgSti5hXLuzzCc2f5cafrNUIAl9bLOcvdVxAAldD-G_6WMhTppbAVGV3QSDmUYzmwiRmsxfrjHWyoB-ZCDqRHk7X4-fqZ4ApjrPTkz3J_RDEVJVg";
+  String token = "";
 
   methodRequest(String route, String method, {dynamic body}) async {
     dynamic resposta;
@@ -15,13 +16,15 @@ class Request {
         print(response.statusCode);
       });
     } else {
+      // final prefs = await SharedPreferences.getInstance();
       await http
           .post(
         Uri.parse("$BASE_URL/$route"),
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
+          "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NTM3NTI5NTcsImV4cCI6MTc1Mzc1NjU1Nywicm9sZXMiOlsiVVNVQVJJTyJdLCJ1c2VybmFtZSI6IjA3ODQ4OTAzMTYyIn0.swX7oJRIFrr-JOuF-h7pf1Q7n_OrDd7yDvS-kthFEl1iTJLArkB7IxJHxI37znM-3sa7pOYdUsUWrGnOYAtp9cLbs3s_FqtHjUvsdXi9bKXiKkcau_I2IeLFsaMoB9TVxqsQBC86ROfRyAO1sPc0LfaLdVJNXzXNgCOAO4QrHtUpWXuqfjB6w58q4yK-Z-VGUrPzx7Ok46fcLnm8pgI2CLplEvHAj2wDGRAcGs6K6QGV_zjuKlXzDzrxMHXKEWFrRzffBTsdjgJGOpleLnqHNq0AbNnCCODqhJ6Jga2CULM7bCz19qeKYMJuG0t5fBRAnIUsSDcQwDynfMO4ZJdwWg"
+          // "Authorization": "Bearer ${prefs.getString("token")!}"
         },
         body: jsonEncode(body),
       )
