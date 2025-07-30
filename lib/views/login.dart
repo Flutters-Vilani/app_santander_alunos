@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:app_santander/controllers/request.dart';
+import 'package:app_santander/controllers/user/user_controller.dart';
 import 'package:app_santander/views/cadastro_conta.dart';
 import 'package:app_santander/views/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
@@ -18,6 +22,8 @@ class _LoginState extends State<Login> {
   TextEditingController senhaController = TextEditingController();
 
   Request request = Request();
+
+  UserController userController = UserController();
 
   @override
   Widget build(BuildContext context) {
@@ -143,21 +149,23 @@ class _LoginState extends State<Login> {
               children: [
                 GestureDetector(
                   onTap: () async {
-                    // final prefs = await SharedPreferences.getInstance();
-                    dynamic resposta = await request.methodRequest(
-                        "auth/login", "POST", body: {
-                      "cpf": cpfController.text,
-                      "senha": senhaController.text
-                    });
+                    try {
+                      final prefs = await SharedPreferences.getInstance();
+                      dynamic resposta = await request.methodRequest(
+                          "auth/login", "POST", body: {
+                        "cpf": cpfController.text,
+                        "senha": senhaController.text
+                      });
 
-                    // await prefs.setString("token", resposta["body"]["token"]);
+                      await prefs.setString("token", resposta["body"]["token"]);
 
-                    print(resposta["body"]["token"]);
+                      await userController.getUserLogado();
 
-                    if (resposta['statusCode'] == 200) {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (ctx) => Dashboard()));
-                    } else {
+                      if (resposta['statusCode'] == 200) {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (ctx) => Dashboard()));
+                      } else {}
+                    } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           backgroundColor: Color.fromARGB(255, 236, 9, 0),

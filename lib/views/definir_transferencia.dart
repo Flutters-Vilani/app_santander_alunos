@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:app_santander/views/revisao_pix.dart';
+import 'package:app_santander/controllers/currency_controller.dart';
 import 'package:flutter/material.dart';
 
 class DefinirTransferencia extends StatefulWidget {
-  const DefinirTransferencia({super.key});
+  final dynamic usuarioDestino;
+  final dynamic chave;
+  const DefinirTransferencia({this.usuarioDestino, this.chave, super.key});
 
   @override
   State<DefinirTransferencia> createState() => _DefinirTransferenciaState();
@@ -10,6 +15,15 @@ class DefinirTransferencia extends StatefulWidget {
 
 class _DefinirTransferenciaState extends State<DefinirTransferencia> {
   TextEditingController controllerValor = TextEditingController();
+  String valorFormatado = '';
+  dynamic usuarioDestino;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    usuarioDestino = jsonDecode(widget.usuarioDestino.toString());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +31,9 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 236, 9, 0),
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
           icon: Icon(
             Icons.arrow_back_ios,
             color: Colors.white,
@@ -52,20 +68,20 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
                       width: 5,
                     ),
                     Text(
-                      "Guilherme Viana Vilani",
+                      usuarioDestino[0]["nome"].toString(),
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                   ],
                 ),
                 Text(
-                  "CPF: ***.489.031-** - NU PAGAMENTOS - IP",
+                  "CPF: ***.${usuarioDestino[0]["cpf"].toString().substring(3, 6)}.${usuarioDestino[0]["cpf"].toString().substring(6, 9)}-** - Santander",
                   style: TextStyle(
                     color: Colors.grey.shade800,
                   ),
                 ),
                 Text(
-                  "Chave: ***.489.031-**",
+                  "Chave: ${widget.chave}",
                   style: TextStyle(
                     color: Colors.grey.shade800,
                   ),
@@ -102,15 +118,27 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
                     border: Border.all(width: 1),
                   ),
                   child: TextField(
+                    controller: controllerValor,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(5),
-                      hintText: "Valor",
-                      // prefixText: "R\$",
+                      hintText: "0,00",
+                      prefixText: "R\$ ",
                     ),
                     onChanged: (value) {
                       setState(() {
-                        controllerValor.text = value;
+                        // Formata o input enquanto digita
+                        String formatted =
+                            CurrencyController.formatInput(value);
+                        if (formatted != value) {
+                          controllerValor.text = formatted;
+                          controllerValor.selection =
+                              TextSelection.fromPosition(
+                            TextPosition(offset: formatted.length),
+                          );
+                        }
+                        valorFormatado = formatted;
                       });
                     },
                   ),
@@ -259,23 +287,31 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
               children: [
                 Divider(),
                 GestureDetector(
-                  onTap: controllerValor.text.isEmpty
-                      ? null
-                      : () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => RevisaoPix(
-                                valor: double.parse(controllerValor.text),
-                              ),
-                            ),
-                          );
-                        },
+                  onTap:
+                      !CurrencyController.isValidCurrency(controllerValor.text)
+                          ? null
+                          : () {
+                              // Converte o valor formatado para double
+                              double valorNumerico =
+                                  CurrencyController.parseCurrency(
+                                      controllerValor.text);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => RevisaoPix(
+                                    valor: valorNumerico,
+                                    usuarioDestino: widget.usuarioDestino,
+                                    chave: widget.chave,
+                                  ),
+                                ),
+                              );
+                            },
                   child: Container(
                     margin: EdgeInsets.only(top: 18),
                     alignment: Alignment.center,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: controllerValor.text.isEmpty
+                      color: !CurrencyController.isValidCurrency(
+                              controllerValor.text)
                           ? Colors.grey
                           : Color.fromARGB(255, 236, 9, 0),
                       borderRadius: BorderRadius.circular(5),

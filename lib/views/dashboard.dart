@@ -2,6 +2,9 @@ import 'package:app_santander/views/pix_1.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../controllers/currency_controller.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -26,6 +29,27 @@ class _DashboardState extends State<Dashboard> {
     {"titulo": "ID Santander", "icon": Icons.lock_open, "route": Pix1()},
     {"titulo": "Pix", "icon": Icons.pix, "route": Pix1()}
   ];
+
+  dynamic nomeUser;
+  dynamic saldoUser;
+
+  init() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      nomeUser = prefs.getString("nome");
+      saldoUser = prefs.getString("saldo");
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    init();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +101,7 @@ class _DashboardState extends State<Dashboard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Olá, Guilherme",
+                            "Olá, $nomeUser",
                             style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
                           Text(
@@ -152,7 +176,8 @@ class _DashboardState extends State<Dashboard> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "R\$ 10.000.000,00",
+                                          CurrencyController.formatCurrency(
+                                              double.parse(saldoUser)),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20),

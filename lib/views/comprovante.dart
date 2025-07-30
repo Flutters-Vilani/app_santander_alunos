@@ -1,8 +1,10 @@
 import 'package:app_santander/views/dashboard.dart';
+import 'package:app_santander/controllers/currency_controller.dart';
 import 'package:flutter/material.dart';
 
 class Comprovante extends StatefulWidget {
-  const Comprovante({super.key});
+  final dynamic valor;
+  Comprovante({this.valor, super.key});
 
   @override
   State<Comprovante> createState() => _ComprovanteState();
@@ -90,7 +92,7 @@ class _ComprovanteState extends State<Comprovante> {
                     style: TextStyle(color: Colors.grey),
                   ),
                   Text(
-                    "R\$ 0,01",
+                    CurrencyController.formatCurrency(widget.valor),
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   SizedBox(

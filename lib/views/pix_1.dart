@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:app_santander/controllers/request.dart';
 import 'package:app_santander/views/definir_transferencia.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +13,7 @@ class Pix1 extends StatefulWidget {
 
 class _Pix1State extends State<Pix1> {
   TextEditingController controllerPix = TextEditingController();
+  Request request = Request();
 
   List cardVoceTambemPodeUsar = [
     {
@@ -83,9 +87,22 @@ class _Pix1State extends State<Pix1> {
             Text("Celular, CPF/CNPJ, e-mail, chave aleatória..."),
             controllerPix.text.isNotEmpty
                 ? GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => DefinirTransferencia()));
+                    onTap: () async {
+                      dynamic resposta = await request.methodRequest(
+                        'usuarios?pesquisa=${controllerPix.text}',
+                        'GET',
+                      );
+
+                      print(resposta["body"]);
+
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DefinirTransferencia(
+                            usuarioDestino: resposta["body"],
+                            chave: controllerPix.text,
+                          ),
+                        ),
+                      );
                     },
                     child: Container(
                       margin: EdgeInsets.only(top: 18),

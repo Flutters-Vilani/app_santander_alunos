@@ -1,11 +1,16 @@
+import 'dart:convert';
+
 import 'package:app_santander/controllers/pix/pix_controller.dart';
+import 'package:app_santander/controllers/currency_controller.dart';
 import 'package:app_santander/views/comprovante.dart';
 import 'package:flutter/material.dart';
 
 class RevisaoPix extends StatefulWidget {
-  double valor;
+  final dynamic usuarioDestino;
+  final double valor;
+  final dynamic chave;
 
-  RevisaoPix({required this.valor, super.key});
+  RevisaoPix({required this.valor, this.usuarioDestino, this.chave, super.key});
 
   @override
   State<RevisaoPix> createState() => _RevisaoPixState();
@@ -14,6 +19,15 @@ class RevisaoPix extends StatefulWidget {
 class _RevisaoPixState extends State<RevisaoPix> {
   bool switchValue = false;
   PixController pixController = PixController();
+
+  dynamic usuarioDestino;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    usuarioDestino = jsonDecode(widget.usuarioDestino.toString());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,20 +79,20 @@ class _RevisaoPixState extends State<RevisaoPix> {
                       width: 5,
                     ),
                     Text(
-                      "Guilherme Viana Vilani",
+                      usuarioDestino[0]["nome"].toString(),
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                   ],
                 ),
                 Text(
-                  "CPF: ***.489.031-** - NU PAGAMENTOS - IP",
+                  "CPF: ***.${usuarioDestino[0]["cpf"].toString().substring(3, 6)}.${usuarioDestino[0]["cpf"].toString().substring(6, 9)}-** - Santander",
                   style: TextStyle(
                     color: Colors.grey.shade800,
                   ),
                 ),
                 Text(
-                  "Chave: ***.489.031-**",
+                  "Chave: ${widget.chave}",
                   style: TextStyle(
                     color: Colors.grey.shade800,
                   ),
@@ -97,7 +111,7 @@ class _RevisaoPixState extends State<RevisaoPix> {
                   ),
                 ),
                 Text(
-                  "R\$ ${widget.valor}",
+                  CurrencyController.formatCurrency(widget.valor),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
@@ -207,7 +221,8 @@ class _RevisaoPixState extends State<RevisaoPix> {
             ),
             GestureDetector(
               onTap: () async {
-                dynamic resposta = await pixController.transferePix();
+                dynamic resposta = await pixController.transferePix(
+                    widget.usuarioDestino, widget.valor);
 
                 print(resposta['statusCode'].toString());
 
@@ -215,7 +230,7 @@ class _RevisaoPixState extends State<RevisaoPix> {
                     resposta['statusCode'] < 300) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => Comprovante(),
+                      builder: (_) => Comprovante(valor: widget.valor),
                     ),
                   );
                 }
