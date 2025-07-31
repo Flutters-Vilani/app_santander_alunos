@@ -3,9 +3,9 @@ import 'package:app_santander/controllers/request.dart';
 class PixController {
   Request request = Request();
 
-  transferePix(dynamic valor, dynamic idDestino) async {
+  transferePix(dynamic idOrigem, dynamic idDestino, dynamic valor) async {
     dynamic resposta = await request.methodRequest("transacoes", "POST", body: {
-      "idusuarioOrigem": "6",
+      "idusuarioOrigem": "$idOrigem",
       "idusuarioDestino": "$idDestino",
       "valor": "$valor"
     });

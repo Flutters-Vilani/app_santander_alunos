@@ -3,7 +3,8 @@ import 'package:app_santander/views/definir_transferencia.dart';
 import 'package:flutter/material.dart';
 
 class Pix1 extends StatefulWidget {
-  const Pix1({super.key});
+  final dynamic userLogado;
+  const Pix1({this.userLogado, super.key});
 
   @override
   State<Pix1> createState() => _Pix1State();
@@ -87,15 +88,20 @@ class _Pix1State extends State<Pix1> {
             controllerPix.text.isNotEmpty
                 ? GestureDetector(
                     onTap: () async {
+                      print(widget.userLogado);
                       dynamic resposta = await request.methodRequest(
                           "usuarios?pesquisa=${controllerPix.text}", "GET");
 
                       print(resposta["body"][0]);
 
-                      Navigator.of(context).push(MaterialPageRoute(
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
                           builder: (context) => DefinirTransferencia(
-                                usuarioDestino: resposta,
-                              )));
+                            usuarioDestino: resposta,
+                            userLogado: widget.userLogado,
+                          ),
+                        ),
+                      );
                     },
                     child: Container(
                       margin: EdgeInsets.only(top: 18),

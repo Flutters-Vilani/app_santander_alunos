@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class DefinirTransferencia extends StatefulWidget {
   final dynamic usuarioDestino;
-  const DefinirTransferencia({this.usuarioDestino, super.key});
+  final dynamic userLogado;
+  const DefinirTransferencia({this.userLogado, this.usuarioDestino, super.key});
 
   @override
   State<DefinirTransferencia> createState() => _DefinirTransferenciaState();
@@ -270,6 +271,7 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
                               builder: (_) => RevisaoPix(
                                 usuarioDestino: widget.usuarioDestino,
                                 valor: double.parse(controllerValor.text),
+                                userLogado: widget.userLogado,
                               ),
                             ),
                           );

@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 
 class RevisaoPix extends StatefulWidget {
   final dynamic usuarioDestino;
+  final dynamic userLogado;
   double valor;
 
-  RevisaoPix({required this.valor, this.usuarioDestino, super.key});
+  RevisaoPix({required this.valor, this.userLogado, this.usuarioDestino, super.key});
 
   @override
   State<RevisaoPix> createState() => _RevisaoPixState();
@@ -208,9 +209,11 @@ class _RevisaoPixState extends State<RevisaoPix> {
             ),
             GestureDetector(
               onTap: () async {
+                
                 dynamic resposta = await pixController.transferePix(
-                  widget.valor,
+                  widget.userLogado["body"]["id"],
                   widget.usuarioDestino["body"][0]["id"],
+                  widget.valor
                 );
 
                 print(resposta['statusCode'].toString());
@@ -219,7 +222,7 @@ class _RevisaoPixState extends State<RevisaoPix> {
                     resposta['statusCode'] < 300) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => Comprovante(),
+                      builder: (_) => Comprovante(userLogado: widget.userLogado,),
                     ),
                   );
                 }

@@ -1,11 +1,12 @@
+import 'package:app_santander/controllers/request.dart';
 import 'package:app_santander/views/pix_1.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
-  final dynamic userLogado;
-  const Dashboard({this.userLogado, super.key});
+  dynamic userLogado;
+  Dashboard({this.userLogado, super.key});
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -15,6 +16,7 @@ class _DashboardState extends State<Dashboard> {
   bool cardAberto = false;
   int _current = 0;
   final CarouselSliderController _controller = CarouselSliderController();
+  Request request = Request();
 
   final List<String> stringList = [
     '1',
@@ -153,7 +155,7 @@ class _DashboardState extends State<Dashboard> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "R\$ 10.000.000,00",
+                                          "R\$ ${widget.userLogado["body"]["saldo"]}",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20),
@@ -210,11 +212,16 @@ class _DashboardState extends State<Dashboard> {
                     padding: const EdgeInsets.all(4.0),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => cardsTransf[index]['route'],
-                          ),
-                        );
+                        // condicao para passar o user logado para a proxima tela
+                        if (index == 0) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => Pix1(
+                                userLogado: widget.userLogado,
+                              ),
+                            ),
+                          );
+                        }
                       },
                       child: Card(
                         child: Container(

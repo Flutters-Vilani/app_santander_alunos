@@ -2,7 +2,8 @@ import 'package:app_santander/views/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class Comprovante extends StatefulWidget {
-  const Comprovante({super.key});
+  final dynamic userLogado;
+  const Comprovante({this.userLogado, super.key});
 
   @override
   State<Comprovante> createState() => _ComprovanteState();
@@ -19,7 +20,7 @@ class _ComprovanteState extends State<Comprovante> {
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => Dashboard()));
+                MaterialPageRoute(builder: (context) => Dashboard(userLogado: widget.userLogado)));
           },
           icon: Icon(
             Icons.close,
