@@ -4,7 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  final dynamic userLogado;
+  const Dashboard({this.userLogado, super.key});
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -77,7 +78,7 @@ class _DashboardState extends State<Dashboard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Olá, Guilherme",
+                            "Olá, ${widget.userLogado["body"]["nome"]}",
                             style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
                           Text(

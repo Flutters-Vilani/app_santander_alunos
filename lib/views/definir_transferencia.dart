@@ -2,7 +2,8 @@ import 'package:app_santander/views/revisao_pix.dart';
 import 'package:flutter/material.dart';
 
 class DefinirTransferencia extends StatefulWidget {
-  const DefinirTransferencia({super.key});
+  final dynamic usuarioDestino;
+  const DefinirTransferencia({this.usuarioDestino, super.key});
 
   @override
   State<DefinirTransferencia> createState() => _DefinirTransferenciaState();
@@ -17,7 +18,9 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 236, 9, 0),
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
           icon: Icon(
             Icons.arrow_back_ios,
             color: Colors.white,
@@ -52,14 +55,14 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
                       width: 5,
                     ),
                     Text(
-                      "Guilherme Viana Vilani",
+                      "${widget.usuarioDestino["body"][0]["nome"]}",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                   ],
                 ),
                 Text(
-                  "CPF: ***.489.031-** - NU PAGAMENTOS - IP",
+                  "CPF: ***.${widget.usuarioDestino["body"][0]["cpf"].toString().substring(3, 6)}.${widget.usuarioDestino["body"][0]["cpf"].toString().substring(6, 9)}-** - NU PAGAMENTOS - IP",
                   style: TextStyle(
                     color: Colors.grey.shade800,
                   ),
@@ -265,6 +268,7 @@ class _DefinirTransferenciaState extends State<DefinirTransferencia> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (_) => RevisaoPix(
+                                usuarioDestino: widget.usuarioDestino,
                                 valor: double.parse(controllerValor.text),
                               ),
                             ),

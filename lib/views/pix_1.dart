@@ -1,3 +1,4 @@
+import 'package:app_santander/controllers/request.dart';
 import 'package:app_santander/views/definir_transferencia.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +21,8 @@ class _Pix1State extends State<Pix1> {
     {"icon": Icons.content_copy_outlined, "title": "Pix\ne cola", "route": ""},
     {"icon": Icons.qr_code_2_outlined, "title": "Código\nQR", "route": ""},
   ];
+
+  Request request = Request();
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +86,16 @@ class _Pix1State extends State<Pix1> {
             Text("Celular, CPF/CNPJ, e-mail, chave aleatória..."),
             controllerPix.text.isNotEmpty
                 ? GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      dynamic resposta = await request.methodRequest(
+                          "usuarios?pesquisa=${controllerPix.text}", "GET");
+
+                      print(resposta["body"][0]);
+
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => DefinirTransferencia()));
+                          builder: (context) => DefinirTransferencia(
+                                usuarioDestino: resposta,
+                              )));
                     },
                     child: Container(
                       margin: EdgeInsets.only(top: 18),

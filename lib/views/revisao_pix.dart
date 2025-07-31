@@ -3,9 +3,10 @@ import 'package:app_santander/views/comprovante.dart';
 import 'package:flutter/material.dart';
 
 class RevisaoPix extends StatefulWidget {
+  final dynamic usuarioDestino;
   double valor;
 
-  RevisaoPix({required this.valor, super.key});
+  RevisaoPix({required this.valor, this.usuarioDestino, super.key});
 
   @override
   State<RevisaoPix> createState() => _RevisaoPixState();
@@ -65,20 +66,20 @@ class _RevisaoPixState extends State<RevisaoPix> {
                       width: 5,
                     ),
                     Text(
-                      "Guilherme Viana Vilani",
+                      "${widget.usuarioDestino["body"][0]["nome"]}",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                   ],
                 ),
                 Text(
-                  "CPF: ***.489.031-** - NU PAGAMENTOS - IP",
+                  "CPF: ***.${widget.usuarioDestino["body"][0]["cpf"].toString().substring(3, 6)}.${widget.usuarioDestino["body"][0]["cpf"].toString().substring(6, 9)}-** - NU PAGAMENTOS - IP",
                   style: TextStyle(
                     color: Colors.grey.shade800,
                   ),
                 ),
                 Text(
-                  "Chave: ***.489.031-**",
+                  "Chave: ${widget.usuarioDestino["body"][0]["email"]}",
                   style: TextStyle(
                     color: Colors.grey.shade800,
                   ),
@@ -207,7 +208,10 @@ class _RevisaoPixState extends State<RevisaoPix> {
             ),
             GestureDetector(
               onTap: () async {
-                dynamic resposta = await pixController.transferePix();
+                dynamic resposta = await pixController.transferePix(
+                  widget.valor,
+                  widget.usuarioDestino["body"][0]["id"],
+                );
 
                 print(resposta['statusCode'].toString());
 

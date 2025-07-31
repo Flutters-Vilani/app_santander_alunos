@@ -4,39 +4,48 @@ import 'package:http/http.dart' as http;
 
 class Request {
   String BASE_URL = "http://santa.avanth.kinghost.net/api";
-  String token = "";
 
   methodRequest(String route, String method, {dynamic body}) async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
     dynamic resposta;
-    if (method == "GET") {
-      await http.get(Uri.parse("$BASE_URL/$route"), headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }).then((http.Response response) {
-        print(response.statusCode);
-      });
-    } else {
-      // final prefs = await SharedPreferences.getInstance();
-      await http
-          .post(
-        Uri.parse("$BASE_URL/$route"),
-        headers: {
+    try {
+      if (method == "GET") {
+        await http.get(Uri.parse("$BASE_URL/$route"), headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
-          "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NTM3NTI5NTcsImV4cCI6MTc1Mzc1NjU1Nywicm9sZXMiOlsiVVNVQVJJTyJdLCJ1c2VybmFtZSI6IjA3ODQ4OTAzMTYyIn0.swX7oJRIFrr-JOuF-h7pf1Q7n_OrDd7yDvS-kthFEl1iTJLArkB7IxJHxI37znM-3sa7pOYdUsUWrGnOYAtp9cLbs3s_FqtHjUvsdXi9bKXiKkcau_I2IeLFsaMoB9TVxqsQBC86ROfRyAO1sPc0LfaLdVJNXzXNgCOAO4QrHtUpWXuqfjB6w58q4yK-Z-VGUrPzx7Ok46fcLnm8pgI2CLplEvHAj2wDGRAcGs6K6QGV_zjuKlXzDzrxMHXKEWFrRzffBTsdjgJGOpleLnqHNq0AbNnCCODqhJ6Jga2CULM7bCz19qeKYMJuG0t5fBRAnIUsSDcQwDynfMO4ZJdwWg"
-          // "Authorization": "Bearer ${prefs.getString("token")!}"
-        },
-        body: jsonEncode(body),
-      )
-          .then((http.Response response) {
-        print(response.statusCode);
-        // print(response.body);
+          // "Authorization": "Bearer ${prefs.getString("token")}" // with SP
+          "Authorization":
+              "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NTM5MjExNDMsImV4cCI6MTc1MzkyNDc0Mywicm9sZXMiOlsiVVNVQVJJTyJdLCJ1c2VybmFtZSI6IjYwOTQxMTg5MTA0In0.alSIQdVpcw-pwIwNsA8AtT2AefNZlYjW9xFShAMo8BXStRvJd2eIbxoq5RLoDme__0GtZvRt1MOcVv7AuTajA8JgeyFCFMeHdQdvhx9c_zSa-3UxDQ1QyupfDrFPpiKOBWuo3HlIYuPTmoyC-qoBbGflLpcOIeAiKINtTmVnHORuMC1_lgDsqUY86_0A-yWld645fGf8cG9KQmmH-b0RzevXmLk5MpAHf6dNOw-Bo3qCJmslTAOQIvC2CxFIRY_RL27Haa-Rp--G-vUrUeIj1Kx1Jo3Wt1N67ATU4dQt5hKSkYqaqnqgUWVGSP53b6PhBAqXT_GlY5FvRiaWy5fRkQ" // without SP
+        }).then((http.Response response) {
+          print(response.statusCode);
 
-        var respDecoded = jsonDecode(response.body);
+          var respDecoded = jsonDecode(response.body);
 
-        resposta = {"statusCode": response.statusCode, "body": respDecoded};
-      });
-    }
+          resposta = {"statusCode": response.statusCode, "body": respDecoded};
+        });
+      } else {
+        await http
+            .post(
+          Uri.parse("$BASE_URL/$route"),
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            // "Authorization": "Bearer ${prefs.getString("token")}" // with SP
+            "Authorization":
+                "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NTM5MjExNDMsImV4cCI6MTc1MzkyNDc0Mywicm9sZXMiOlsiVVNVQVJJTyJdLCJ1c2VybmFtZSI6IjYwOTQxMTg5MTA0In0.alSIQdVpcw-pwIwNsA8AtT2AefNZlYjW9xFShAMo8BXStRvJd2eIbxoq5RLoDme__0GtZvRt1MOcVv7AuTajA8JgeyFCFMeHdQdvhx9c_zSa-3UxDQ1QyupfDrFPpiKOBWuo3HlIYuPTmoyC-qoBbGflLpcOIeAiKINtTmVnHORuMC1_lgDsqUY86_0A-yWld645fGf8cG9KQmmH-b0RzevXmLk5MpAHf6dNOw-Bo3qCJmslTAOQIvC2CxFIRY_RL27Haa-Rp--G-vUrUeIj1Kx1Jo3Wt1N67ATU4dQt5hKSkYqaqnqgUWVGSP53b6PhBAqXT_GlY5FvRiaWy5fRkQ" // without SP
+          },
+          body: jsonEncode(body),
+        )
+            .then((http.Response response) {
+          print(response.statusCode);
+          // print(response.body);
+
+          var respDecoded = jsonDecode(response.body);
+
+          resposta = {"statusCode": response.statusCode, "body": respDecoded};
+        });
+      }
+    } catch (e) {}
 
     return resposta;
   }

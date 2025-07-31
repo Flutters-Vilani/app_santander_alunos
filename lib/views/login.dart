@@ -150,13 +150,20 @@ class _LoginState extends State<Login> {
                       "senha": senhaController.text
                     });
 
+                    dynamic respostaUser =
+                        await request.methodRequest("usuarios/sessao", "GET");
+
+                    print(respostaUser);
+
                     // await prefs.setString("token", resposta["body"]["token"]);
 
                     print(resposta["body"]["token"]);
 
                     if (resposta['statusCode'] == 200) {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (ctx) => Dashboard()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (ctx) => Dashboard(
+                                userLogado: respostaUser,
+                              )));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
